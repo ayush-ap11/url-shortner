@@ -80,7 +80,7 @@ export default function Body() {
               >
                 <div
                   className={`
-                    absolute inset-0 bg-gradient-to-br ${feature.gradient} to-transparent 
+                    absolute inset-0 bg-linear-to-br ${feature.gradient} to-transparent 
                     opacity-0 group-hover:opacity-20 transition-all
                   `}
                 ></div>

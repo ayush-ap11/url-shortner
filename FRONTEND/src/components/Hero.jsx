@@ -20,7 +20,7 @@ export default function Hero() {
       "
     >
       {/* Soft Background Glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-neutral-900 via-neutral-900/90 to-black opacity-80 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-linear-to-b from-neutral-900 via-neutral-900/90 to-black opacity-80 pointer-events-none"></div>
 
       {/* Subtle Blur Circles - iOS style */}
       <div className="absolute w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[180px] top-20 left-20"></div>
