@@ -74,8 +74,6 @@ export const CreateLinkModal = ({ isOpen, onClose }) => {
       maxClicks: formData.maxClicks ? parseInt(formData.maxClicks) : undefined,
     };
 
-    console.log("Sending data:", urlData); // Debug log
-
     const result = await dispatch(createUrl(urlData));
 
     if (!result.error) {

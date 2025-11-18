@@ -1,90 +1,54 @@
 const Link = require("../models/Link");
-const crypto = require("crypto");
-const validator = require("validator");
-
-// helper to generate random slug
-function generateSlug() {
-  return crypto.randomBytes(4).toString("hex").slice(0, 6);
-}
+const {
+  generateSlug,
+  validateUrl,
+  parseExpiresAt,
+  parseMaxClicks,
+  checkSlugAvailability,
+  refreshExpirationStatus,
+} = require("../utils/linkHelpers");
 
 // Create new short link
 exports.createLink = async (req, res) => {
   try {
     const { originalUrl, customSlug, expiresAt, maxClicks, domain } = req.body;
 
-    console.log("Received data:", {
-      originalUrl,
-      customSlug,
-      expiresAt,
-      maxClicks,
-      domain,
-    });
-
-    if (!originalUrl) {
-      console.log("❌ Validation failed: Original URL missing");
-      return res.status(400).json({ errors: ["Original URL is required"] });
+    // Validate URL
+    const urlValidation = validateUrl(originalUrl);
+    if (!urlValidation.valid) {
+      return res.status(400).json({ errors: [urlValidation.error] });
     }
 
-    if (!validator.isURL(originalUrl, { require_protocol: true })) {
-      console.log("❌ Validation failed: Invalid URL format");
-      return res.status(400).json({
-        errors: ["Invalid URL format. Must include http:// or https://"],
-      });
-    }
-
+    // Generate or use custom slug
     let slug = customSlug?.toLowerCase().trim() || generateSlug();
-    console.log("Generated/Custom slug:", slug);
 
-    // check slug exists
-    const exists = await Link.findOne({ slug });
-    if (exists) {
-      console.log("❌ Validation failed: Slug already taken:", slug);
+    // Check slug availability
+    const isAvailable = await checkSlugAvailability(Link, slug);
+    if (!isAvailable) {
       return res.status(400).json({ errors: ["Slug already taken"] });
     }
 
-    // Parse and validate expiresAt if provided
-    let parsedExpiresAt = null;
-    if (expiresAt) {
-      parsedExpiresAt = new Date(expiresAt);
-      console.log("Parsed expiresAt:", parsedExpiresAt);
-      if (isNaN(parsedExpiresAt.getTime())) {
-        console.log("❌ Validation failed: Invalid expiration date format");
-        return res.status(400).json({ errors: ["Invalid expiration date"] });
-      }
-      // Check if date is in the past
-      if (parsedExpiresAt < new Date()) {
-        console.log("❌ Validation failed: Expiration date is in the past");
-        return res
-          .status(400)
-          .json({ errors: ["Expiration date must be in the future"] });
-      }
+    // Validate expiration date
+    const expiresValidation = parseExpiresAt(expiresAt);
+    if (!expiresValidation.valid) {
+      return res.status(400).json({ errors: [expiresValidation.error] });
     }
 
-    // Validate maxClicks if provided
-    let parsedMaxClicks = null;
-    if (maxClicks) {
-      parsedMaxClicks = parseInt(maxClicks);
-      console.log("Parsed maxClicks:", parsedMaxClicks);
-      if (isNaN(parsedMaxClicks) || parsedMaxClicks <= 0) {
-        console.log("❌ Validation failed: Invalid maxClicks value");
-        return res
-          .status(400)
-          .json({ errors: ["Max clicks must be a positive number"] });
-      }
+    // Validate max clicks
+    const clicksValidation = parseMaxClicks(maxClicks);
+    if (!clicksValidation.valid) {
+      return res.status(400).json({ errors: [clicksValidation.error] });
     }
-
-    console.log("✅ All validations passed, creating link...");
 
     const newLink = await Link.create({
       user: req.userId,
       originalUrl,
       slug,
       domain: domain || "",
-      expiresAt: parsedExpiresAt,
-      maxClicks: parsedMaxClicks,
+      expiresAt: expiresValidation.value,
+      maxClicks: clicksValidation.value,
     });
 
-    console.log("✅ Link created successfully:", newLink._id);
     res.status(201).json({ link: newLink });
   } catch (err) {
     console.error("Link creation error:", err);
@@ -98,8 +62,6 @@ exports.getLinks = async (req, res) => {
   try {
     const { search } = req.query;
 
-    console.log("Fetching links for user:", req.userId, "Search:", search);
-
     let filter = { user: req.userId };
 
     if (search) {
@@ -108,8 +70,6 @@ exports.getLinks = async (req, res) => {
     }
 
     const links = await Link.find(filter).sort({ createdAt: -1 });
-
-    console.log(`Found ${links.length} links for user`);
 
     // auto check expiry flag
     links.forEach((l) => {
@@ -128,76 +88,54 @@ exports.updateLink = async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log(
-      "Update request - ID:",
-      id,
-      "Body:",
-      req.body,
-      "User:",
-      req.userId
-    );
+    // Update metadata
 
     const link = await Link.findOne({ _id: id, user: req.userId });
     if (!link) {
-      console.log("❌ Link not found");
       return res.status(404).json({ errors: ["Link not found"] });
     }
-    console.log("Found link:", link.slug);
 
     const { originalUrl, expiresAt, maxClicks } = req.body;
 
-    if (
-      originalUrl &&
-      !validator.isURL(originalUrl, { require_protocol: true })
-    ) {
-      return res
-        .status(400)
-        .json({ errors: ["Valid URL with protocol required"] });
+    // Validate URL if provided
+    if (originalUrl) {
+      const urlValidation = validateUrl(originalUrl);
+      if (!urlValidation.valid) {
+        return res.status(400).json({ errors: [urlValidation.error] });
+      }
+      link.originalUrl = originalUrl;
     }
 
-    // Parse and validate expiresAt if provided
+    // Update expiration date
     if (expiresAt !== undefined) {
       if (expiresAt === null || expiresAt === "") {
         link.expiresAt = null;
       } else {
-        const parsedDate = new Date(expiresAt);
-        if (isNaN(parsedDate.getTime())) {
-          return res.status(400).json({ errors: ["Invalid expiration date"] });
+        const expiresValidation = parseExpiresAt(expiresAt);
+        if (!expiresValidation.valid) {
+          return res.status(400).json({ errors: [expiresValidation.error] });
         }
-        if (parsedDate < new Date()) {
-          return res
-            .status(400)
-            .json({ errors: ["Expiration date must be in the future"] });
-        }
-        link.expiresAt = parsedDate;
+        link.expiresAt = expiresValidation.value;
       }
     }
 
-    // Validate maxClicks if provided
+    // Update max clicks
     if (maxClicks !== undefined) {
       if (maxClicks === null || maxClicks === "") {
         link.maxClicks = null;
       } else {
-        const parsedMaxClicks = parseInt(maxClicks);
-        if (isNaN(parsedMaxClicks) || parsedMaxClicks <= 0) {
-          return res
-            .status(400)
-            .json({ errors: ["Max clicks must be a positive number"] });
+        const clicksValidation = parseMaxClicks(maxClicks);
+        if (!clicksValidation.valid) {
+          return res.status(400).json({ errors: [clicksValidation.error] });
         }
-        link.maxClicks = parsedMaxClicks;
+        link.maxClicks = clicksValidation.value;
       }
     }
 
-    if (originalUrl) link.originalUrl = originalUrl;
-
-    // Reset isExpired flag and recalculate expiration status
-    link.isExpired = false;
-    if (link.checkExpired()) {
-      link.isExpired = true;
-    }
+    // Refresh expiration status
+    refreshExpirationStatus(link);
 
     await link.save();
-    console.log("✅ Link updated successfully:", link._id);
     res.json({ link });
   } catch (err) {
     console.error("❌ Update link error:", err);

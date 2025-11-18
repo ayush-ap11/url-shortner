@@ -1,7 +1,6 @@
 // Environment configuration
 export const config = {
   apiBaseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
-  shortUrlBase: import.meta.env.VITE_SHORT_URL_BASE || "http://localhost:3000",
   googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID || "",
   githubClientId: import.meta.env.VITE_GITHUB_CLIENT_ID || "",
   githubRedirectUri:

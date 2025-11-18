@@ -1,319 +1,424 @@
-# 🔗 URL Shortener - Full Stack Application
+# 🔗 Shortly - Modern URL Shortener
 
-A modern, full-stack URL shortener application with analytics, built with **React**, **Redux Toolkit**, **Express.js**, and **MongoDB**. Features secure **cookie-based authentication** and a beautiful, responsive UI.
+A full-stack URL shortening service with analytics, OAuth authentication, and a beautiful iOS-inspired glass morphism design. Built with the MERN stack (MongoDB, Express, React, Node.js) and modern web technologies.
+
+---
+
+## 📖 Description
+
+Shortly is a powerful yet simple URL shortening platform that allows users to create custom short links, track analytics, and manage their URLs with ease. The application features a clean, modern UI with smooth animations and a comprehensive dashboard for monitoring link performance.
+
+**Key Highlights:**
+- 🎨 Modern iOS-inspired glass morphism UI design
+- 🔐 Secure JWT-based authentication with OAuth support (GitHub & Google)
+- 📊 Detailed click analytics with device, browser, and referrer tracking
+- ⚡ Fast and lightweight with optimized bundle size
+- 🔒 Enterprise-grade security with rate limiting and data validation
+- 📱 Fully responsive design for mobile, tablet, and desktop
+
+---
 
 ## ✨ Features
 
 ### Core Features
-- 🔐 **Secure Authentication** - Cookie-based JWT authentication (httpOnly cookies)
-- 🔗 **URL Shortening** - Create custom short links
-- 📊 **Analytics Dashboard** - Track clicks, devices, locations
-- ⏰ **Link Expiration** - Set expiry dates for links
-- 🎨 **Modern UI** - Responsive design with Tailwind CSS
-- 🔒 **Protected Routes** - Role-based access control
-- ⚡ **Real-time Updates** - Redux state management
+- **URL Shortening**: Convert long URLs into clean, short links instantly
+- **Custom Slugs**: Create branded short links with custom slugs
+- **Link Expiration**: Set expiration dates or click limits for temporary links
+- **QR Code Generation**: Generate QR codes for easy sharing (planned)
+- **Search & Filter**: Quickly find links with real-time search
 
-### Security Features
-- ✅ httpOnly cookies (XSS protection)
-- ✅ CORS configuration
-- ✅ Rate limiting
-- ✅ Password hashing (bcrypt)
-- ✅ JWT token expiration
-- ✅ SameSite cookies (CSRF protection)
-- ✅ Helmet.js security headers
+### Analytics & Tracking
+- **Click Analytics**: Track total clicks per link
+- **Device Detection**: Monitor clicks by device type (Desktop, Mobile, Tablet)
+- **Browser Tracking**: See which browsers are used to access links
+- **Referrer Data**: Track where your traffic is coming from
+- **Time-based Analytics**: View click trends over time
+
+### Authentication & Security
+- **Email/Password Authentication**: Traditional registration and login
+- **OAuth Integration**: Sign in with GitHub or Google
+- **JWT Tokens**: Secure token-based authentication with httpOnly cookies
+- **Rate Limiting**: Prevent abuse with built-in rate limiters
+- **Input Validation**: Comprehensive server-side and client-side validation
+- **CORS Protection**: Secure cross-origin resource sharing
+- **Helmet Security**: HTTP header security middleware
+
+### User Experience
+- **Dashboard**: Comprehensive dashboard with link management
+- **Real-time Updates**: Instant UI updates with Redux state management
+- **Modal-based Editing**: Clean UX for creating and editing links
+- **Animated Transitions**: Smooth animations for better user experience
+- **Toast Notifications**: Real-time feedback for user actions
+- **Responsive Design**: Works seamlessly on all devices
+
+---
 
 ## 🛠️ Tech Stack
 
-### Backend
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB + Mongoose
-- **Authentication:** JWT + cookie-parser
-- **Security:** Helmet, CORS, bcrypt
-- **Validation:** Custom validators
-
 ### Frontend
-- **Framework:** React 19
-- **State Management:** Redux Toolkit
-- **HTTP Client:** Axios
-- **Routing:** React Router v6
-- **Styling:** Tailwind CSS
-- **Icons:** Lucide React
-- **Build Tool:** Vite
+- **React 19** - Modern UI library with latest features
+- **Vite** - Lightning-fast build tool and dev server
+- **Redux Toolkit** - State management with createAsyncThunk
+- **React Router v7** - Client-side routing
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **Lucide React** - Beautiful icon library
+- **Axios** - Promise-based HTTP client
+- **@react-oauth/google** - Google OAuth integration
 
-## 📁 Project Structure
+### Backend
+- **Node.js** - JavaScript runtime
+- **Express 5** - Fast, minimalist web framework
+- **MongoDB** - NoSQL database for scalability
+- **Mongoose** - Elegant MongoDB ODM
+- **JWT** - JSON Web Token authentication
+- **bcryptjs** - Password hashing
+- **Helmet** - Security middleware
+- **express-rate-limit** - Rate limiting middleware
+- **express-useragent** - User agent detection
+- **Validator** - String validation and sanitization
+- **Cookie-parser** - Parse cookies
+- **CORS** - Cross-Origin Resource Sharing
+- **Axios** - OAuth API requests
+- **dotenv** - Environment variable management
+
+### Development Tools
+- **ESLint** - Code linting
+- **Nodemon** - Auto-restart dev server
+- **Git** - Version control
+
+---
+
+## 📁 Folder Structure
 
 ```
 url-shortner/
 ├── BACKEND/
-│   ├── app.js                 # Express server
-│   ├── .env                   # Environment variables
 │   ├── config/
-│   │   └── db.js             # MongoDB connection
-│   ├── controllers/          # Business logic
-│   │   ├── authController.js
-│   │   ├── linkController.js
-│   │   └── analyticsController.js
+│   │   └── db.js                    # MongoDB connection
+│   ├── controllers/
+│   │   ├── analyticsController.js   # Analytics endpoints
+│   │   ├── authController.js        # Auth & OAuth logic
+│   │   ├── linkController.js        # Link CRUD operations
+│   │   └── redirectController.js    # Link redirect handler
 │   ├── middleware/
-│   │   └── authMiddleware.js # JWT verification
-│   ├── models/               # Mongoose schemas
-│   │   ├── User.js
-│   │   ├── Link.js
-│   │   └── Analytics.js
-│   ├── routes/               # API routes
-│   │   ├── auth.js
-│   │   ├── links.js
-│   │   └── analytics.js
-│   └── utils/
-│       └── validators.js     # Input validation
+│   │   └── authMiddleware.js        # JWT verification
+│   ├── models/
+│   │   ├── Analytics.js             # Analytics schema
+│   │   ├── Link.js                  # Link schema
+│   │   └── User.js                  # User schema
+│   ├── routes/
+│   │   ├── analytics.js             # Analytics routes
+│   │   ├── auth.js                  # Auth routes
+│   │   ├── links.js                 # Link routes
+│   │   └── redirectNew.js           # Redirect routes
+│   ├── utils/
+│   │   ├── authHelpers.js           # JWT & cookie utilities
+│   │   ├── linkHelpers.js           # Link validation helpers
+│   │   ├── oauthHelpers.js          # OAuth API utilities
+│   │   ├── userHelpers.js           # User operations
+│   │   └── validators.js            # Input validators
+│   ├── .env                         # Environment variables
+│   ├── app.js                       # Express app entry
+│   └── package.json
 │
 ├── FRONTEND/
+│   ├── public/                      # Static assets
 │   ├── src/
-│   │   ├── components/       # React components
-│   │   ├── pages/            # Page components
-│   │   ├── services/         # API services
-│   │   │   ├── api.js       # Axios instance
-│   │   │   ├── authService.js
-│   │   │   └── urlService.js
-│   │   ├── store/            # Redux store
-│   │   │   └── slices/
-│   │   │       ├── authSlice.js
-│   │   │       └── urlSlice.js
-│   │   ├── utils/            # Helper functions
-│   │   └── hooks/            # Custom hooks
-│   └── .env                  # Frontend config
+│   │   ├── assets/                  # Images, fonts, etc.
+│   │   ├── components/
+│   │   │   ├── forms/
+│   │   │   │   ├── FormDivider.jsx
+│   │   │   │   ├── OAuthButtons.jsx
+│   │   │   │   └── index.js
+│   │   │   ├── pricing/
+│   │   │   │   ├── BillingToggle.jsx
+│   │   │   │   ├── ComparisonTable.jsx
+│   │   │   │   ├── FAQItem.jsx
+│   │   │   │   ├── PricingCard.jsx
+│   │   │   │   └── index.js
+│   │   │   ├── shared/
+│   │   │   │   ├── SearchBar.jsx
+│   │   │   │   └── index.js
+│   │   │   ├── ui/
+│   │   │   │   ├── Alert.jsx
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Card.jsx
+│   │   │   │   ├── Input.jsx
+│   │   │   │   ├── Spinner.jsx
+│   │   │   │   └── index.js
+│   │   │   ├── AnalyticsModal.jsx
+│   │   │   ├── Body.jsx
+│   │   │   ├── CreateLinkModal.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── EditLinkModal.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Hero.jsx
+│   │   │   ├── LinkCard.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   └── index.js
+│   │   ├── config/
+│   │   │   └── env.js                # Environment config
+│   │   ├── constants/
+│   │   │   ├── index.js              # App constants
+│   │   │   └── pricing.js            # Pricing data
+│   │   ├── hooks/
+│   │   │   ├── useAuth.js            # Auth hook
+│   │   │   ├── useAuthInit.js        # Auth initialization
+│   │   │   ├── useDebounce.js        # Debounce hook
+│   │   │   ├── useWindowSize.js      # Window size hook
+│   │   │   └── index.js
+│   │   ├── layouts/
+│   │   │   └── index.jsx             # Layout components
+│   │   ├── pages/
+│   │   │   ├── AccountPage.jsx
+│   │   │   ├── ContactPage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── GithubCallbackPage.jsx
+│   │   │   ├── GoogleCallbackPage.jsx
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── PricingPage.jsx
+│   │   │   └── RegisterPage.jsx
+│   │   ├── routes/
+│   │   │   └── ProtectedRoute.jsx    # Auth guard
+│   │   ├── services/
+│   │   │   ├── api.js                # Axios instance
+│   │   │   ├── authService.js        # Auth API calls
+│   │   │   ├── urlService.js         # Link API calls
+│   │   │   └── userService.js        # User API calls
+│   │   ├── store/
+│   │   │   ├── slices/
+│   │   │   │   ├── authSlice.js      # Auth state
+│   │   │   │   └── urlSlice.js       # URL state
+│   │   │   └── index.js              # Redux store
+│   │   ├── utils/
+│   │   │   ├── auth.js               # Auth utilities
+│   │   │   ├── helpers.js            # Helper functions
+│   │   │   └── validation.js         # Client validation
+│   │   ├── App.jsx                   # Root component
+│   │   ├── index.css                 # Global styles
+│   │   └── main.jsx                  # Entry point
+│   ├── .env                          # Environment variables
+│   ├── .env.example                  # Env template
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── README.md
+│   └── vite.config.js
 │
-├── API_DOCUMENTATION.md      # API reference
-├── INTEGRATION_GUIDE.md      # Setup guide
-├── INTEGRATION_SUMMARY.md    # Change summary
-├── QUICKSTART.md             # Quick start
-├── setup.ps1                 # Setup script
-└── test-api.html             # API tester
+└── README.md                         # This file
 ```
 
-## 🚀 Quick Start
+---
+
+## 🚀 Installation
 
 ### Prerequisites
-- **Node.js** (v16 or higher)
-- **MongoDB** (running on localhost:27017)
-- **npm** or **yarn**
+- **Node.js** (v18 or higher)
+- **MongoDB** (v6 or higher) - Local or MongoDB Atlas
+- **npm** or **yarn** package manager
+- **Git** for version control
 
-### Option 1: Automated Setup (Windows)
-```powershell
-# Run the setup script (installs dependencies and starts servers)
-.\setup.ps1
+### 1. Clone the Repository
+```bash
+git clone https://github.com/ayush-ap11/url-shortner.git
+cd url-shortner
 ```
 
-### Option 2: Manual Setup
+### 2. Backend Setup
 
-#### 1. Setup Backend
 ```bash
+# Navigate to backend directory
 cd BACKEND
-npm install
-npm run dev
-```
-Backend runs on **http://localhost:3000**
 
-#### 2. Setup Frontend
+# Install dependencies
+npm install
+
+# Create .env file (see Environment Variables section)
+cp .env.example .env
+
+# Start MongoDB (if running locally)
+# mongod
+
+# Start development server
+npm run dev
+
+# Or for production
+npm start
+```
+
+The backend server will start on `http://localhost:3000`
+
+### 3. Frontend Setup
+
 ```bash
+# Navigate to frontend directory (from root)
 cd FRONTEND
+
+# Install dependencies
 npm install
+
+# Create .env file (see Environment Variables section)
+cp .env.example .env
+
+# Start development server
 npm run dev
-```
-Frontend runs on **http://localhost:5173**
 
-### 🎉 You're Ready!
-- Open **http://localhost:5173** in your browser
-- Register a new account
-- Start creating short links!
+# Build for production
+npm run build
 
-## 📚 Documentation
-
-| Document | Description |
-|----------|-------------|
-| **[QUICKSTART.md](QUICKSTART.md)** | Quick setup and start guide |
-| **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** | Complete integration guide with architecture |
-| **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** | Detailed API endpoint reference |
-| **[INTEGRATION_SUMMARY.md](INTEGRATION_SUMMARY.md)** | Summary of integration changes |
-| **[test-api.html](test-api.html)** | Interactive API testing tool |
-
-## 🔐 Authentication Flow
-
-### Cookie-Based Authentication
-This application uses **httpOnly cookies** for secure authentication:
-
-1. User registers/logs in with credentials
-2. Backend validates and creates JWT token
-3. Backend sets httpOnly cookie with token
-4. Browser automatically sends cookie with each request
-5. Backend verifies cookie on protected routes
-
-**Benefits:**
-- ✅ More secure than localStorage (XSS protection)
-- ✅ Automatic cookie management by browser
-- ✅ CSRF protection with SameSite attribute
-- ✅ No manual token handling in frontend
-
-## 📡 API Endpoints
-
-### Authentication
-```
-POST   /api/auth/register    # Register new user
-POST   /api/auth/login       # Login user
-POST   /api/auth/logout      # Logout user
-GET    /api/auth/me          # Get current user (protected)
+# Preview production build
+npm run preview
 ```
 
-### Links (Protected)
-```
-POST   /api/links/create     # Create short link
-GET    /api/links/all        # Get all user links
-GET    /api/links/:id        # Get single link
-PUT    /api/links/:id        # Update link
-DELETE /api/links/:id        # Delete link
-```
+The frontend will start on `http://localhost:5173`
 
-### Analytics (Protected)
-```
-GET    /api/analytics/:slug  # Get link analytics
-```
+---
 
-## 🧪 Testing
+## 🔐 Environment Variables
 
-### Interactive API Testing
-Open `test-api.html` in your browser to test all API endpoints with a visual interface.
+### Backend (.env)
 
-### Using cURL
-```bash
-# Register
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -c cookies.txt \
-  -d '{"name":"Test","email":"test@example.com","password":"Test@123456","phone":"9876543210"}'
-
-# Login
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -c cookies.txt \
-  -d '{"email":"test@example.com","password":"Test@123456"}'
-
-# Get user (with cookie)
-curl http://localhost:3000/api/auth/me -b cookies.txt
-```
-
-## ⚙️ Configuration
-
-### Backend Environment Variables (`.env`)
 ```env
+# Server Configuration
 PORT=3000
+NODE_ENV=development
+
+# Database
 MONGO_URI=mongodb://localhost:27017/shortly
-JWT_SECRET=your-secret-key
+# For MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/shortly
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_min_32_chars
 JWT_EXPIRES_IN=7d
-COOKIE_SECURE=false          # Set to true in production (HTTPS)
+
+# Cookie Configuration
+COOKIE_SECURE=false
 COOKIE_SAMESITE=lax
+
+# CORS
 CLIENT_ORIGIN=http://localhost:5173
-SHORT_URL_BASE=http://localhost:3000
+
+# OAuth Configuration
+# GitHub OAuth (Get from: https://github.com/settings/developers)
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+
+# Google OAuth (Get from: https://console.cloud.google.com/apis/credentials)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=http://localhost:5173/auth/google/callback
 ```
 
-### Frontend Environment Variables (`.env`)
+### Frontend (.env)
+
 ```env
+# API Configuration
 VITE_API_BASE_URL=http://localhost:3000/api
+
+# OAuth Configuration
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_GITHUB_CLIENT_ID=your_github_client_id
+VITE_GITHUB_REDIRECT_URI=http://localhost:5173/auth/github/callback
+
+# App Configuration
 VITE_APP_URL=http://localhost:5173
 ```
 
-## 🐛 Troubleshooting
+### Getting OAuth Credentials
 
-### MongoDB Connection Error
-```bash
-# Check if MongoDB is running
-mongod --version
+**GitHub OAuth:**
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
+2. Create a new OAuth App
+3. Set Authorization callback URL to: `http://localhost:5173/auth/github/callback`
+4. Copy Client ID and Client Secret to your `.env` files
 
-# Start MongoDB (Windows)
-net start MongoDB
-```
-
-### Port Already in Use
-```bash
-# Windows - Kill process on port 3000
-netstat -ano | findstr :3000
-taskkill /PID <PID> /F
-```
-
-### CORS Errors
-- Ensure `CLIENT_ORIGIN` in backend `.env` matches frontend URL
-- Verify frontend uses `http://localhost:5173` (not 127.0.0.1)
-
-### Cookie Not Being Set
-- Check `COOKIE_SECURE=false` for local development (HTTP)
-- Ensure `withCredentials: true` in axios config
-- Verify cookie exists in DevTools > Application > Cookies
-
-## 📈 Development
-
-### Backend Scripts
-```bash
-npm start          # Start production server
-npm run dev        # Start development server (nodemon)
-```
-
-### Frontend Scripts
-```bash
-npm run dev        # Start development server
-npm run build      # Build for production
-npm run preview    # Preview production build
-npm run lint       # Run ESLint
-```
-
-## 🔒 Security Considerations
-
-### Development
-- ✅ httpOnly cookies enabled
-- ✅ CORS restricted to localhost
-- ✅ Rate limiting on auth routes
-- ✅ Password validation and hashing
-- ✅ JWT token expiration
-
-### Production Checklist
-- [ ] Set `COOKIE_SECURE=true` (HTTPS only)
-- [ ] Use strong `JWT_SECRET` (32+ characters)
-- [ ] Configure specific CORS origins
-- [ ] Enable rate limiting for all routes
-- [ ] Set up SSL certificates
-- [ ] Use environment-specific configs
-- [ ] Implement proper logging
-- [ ] Set up error monitoring (Sentry, etc.)
-- [ ] Add database backups
-- [ ] Implement email verification
-
-## 📝 License
-
-This project is open source and available under the MIT License.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-## 👤 Author
-
-Your Name
-
-## 🙏 Acknowledgments
-
-- React Documentation
-- Express.js Documentation
-- MongoDB Documentation
-- Redux Toolkit Documentation
-- Tailwind CSS
+**Google OAuth:**
+1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+2. Create OAuth 2.0 Client ID
+3. Add authorized redirect URI: `http://localhost:5173/auth/google/callback`
+4. Copy Client ID and Client Secret to your `.env` files
 
 ---
 
-## 📞 Support
+## 🔒 Security & Best Practices
 
-For detailed documentation, see:
-- **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** - Complete setup guide
-- **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - API reference
-- **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide
+### Implemented Security Measures
+- **JWT Authentication**: Secure token-based auth with httpOnly cookies
+- **Password Hashing**: bcryptjs with salt rounds for secure storage
+- **Rate Limiting**: Prevents brute force attacks and API abuse
+- **Input Validation**: Comprehensive validation on client and server
+- **CORS Protection**: Configured for specific origins only
+- **Helmet Middleware**: Sets secure HTTP headers
+- **XSS Protection**: Input sanitization and output encoding
+- **SQL Injection Prevention**: Using Mongoose ODM with parameterized queries
+- **Environment Variables**: Sensitive data stored securely
+- **Cookie Security**: httpOnly, secure, and SameSite flags
+
+### Security Notes
+⚠️ **Important:**
+- Change default JWT_SECRET before deployment
+- Enable COOKIE_SECURE=true in production
+- Use HTTPS in production environments
+- Implement CSP (Content Security Policy) headers
+- Regular dependency updates for security patches
+- Monitor and log suspicious activities
 
 ---
 
-**Made with ❤️ using React, Express, and MongoDB**
+## 🔮 Future Improvements
+
+### Planned Features
+- [ ] **QR Code Generation**: Generate QR codes for each short link
+- [ ] **Link Categorization**: Organize links with tags and folders
+- [ ] **Team Collaboration**: Multi-user workspaces with permissions
+- [ ] **Custom Domains**: Full custom domain support with SSL
+- [ ] **Link Preview**: Unfurl URLs with metadata and thumbnails
+- [ ] **Bulk Import/Export**: CSV import/export for link management
+- [ ] **Advanced Analytics**: Geolocation, time-zone based tracking
+- [ ] **API Access**: Public API with rate-limited access
+- [ ] **Link Scheduling**: Schedule links to go live at specific times
+- [ ] **A/B Testing**: Split traffic between multiple destinations
+- [ ] **Email Notifications**: Alerts for link performance milestones
+- [ ] **Dark Mode**: Full dark theme support
+- [ ] **Mobile App**: Native iOS and Android apps
+- [ ] **Browser Extension**: Quick link shortening from any page
+
+### Technical Improvements
+- [ ] Add comprehensive unit and integration tests (Jest, React Testing Library)
+- [ ] Implement Redis caching for improved performance
+- [ ] Add WebSocket support for real-time analytics
+- [ ] Implement CDN integration for static assets
+- [ ] Add Docker containerization
+- [ ] Set up CI/CD pipeline (GitHub Actions)
+- [ ] Implement database indexing optimization
+- [ ] Add TypeScript for type safety
+- [ ] Implement server-side rendering (SSR)
+- [ ] Add Progressive Web App (PWA) support
+- [ ] Implement logging and monitoring (Winston, Morgan)
+- [ ] Add backup and disaster recovery
+
+---
+
+## 👨‍💻 Author
+
+**Ayush Patel**
+
+Full-Stack Developer passionate about building modern, scalable web applications with clean code and beautiful UI/UX.
+
+### Connect with Me
+- 🌐 **GitHub**: [https://github.com/ayush-ap11](https://github.com/ayush-ap11)
+- 💼 **LinkedIn**: [https://linkedin.com/in/ayush-ap11](https://linkedin.com/in/ayush-ap11)
+- 📧 **Email**: pawarayush1105@gmail.com
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+---
+
+**⭐ If you find this project useful, please consider giving it a star on GitHub!**

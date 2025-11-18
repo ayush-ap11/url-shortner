@@ -26,8 +26,6 @@ const ContactPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement actual form submission
-    console.log("Form submitted:", formData);
     setFormStatus("success");
     setTimeout(() => {
       setFormData({ name: "", email: "", subject: "", message: "" });

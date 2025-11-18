@@ -34,9 +34,7 @@ export const fetchUrls = createAsyncThunk(
   "url/fetchAll",
   async (params, { rejectWithValue }) => {
     try {
-      console.log("Fetching URLs with params:", params);
       const data = await urlService.getUrls(params);
-      console.log("Fetched data:", data);
       return data;
     } catch (error) {
       console.error("Fetch URLs error:", error.response?.data);
@@ -65,9 +63,7 @@ export const updateUrl = createAsyncThunk(
   "url/update",
   async ({ id, urlData }, { rejectWithValue }) => {
     try {
-      console.log("Updating link with ID:", id, "Data:", urlData);
       const data = await urlService.updateUrl(id, urlData);
-      console.log("Update response:", data);
       return data;
     } catch (error) {
       console.error("Update error:", error.response?.data);
@@ -98,9 +94,7 @@ export const fetchAnalytics = createAsyncThunk(
   "url/fetchAnalytics",
   async ({ slug, params }, { rejectWithValue }) => {
     try {
-      console.log("Fetching analytics for slug:", slug);
       const data = await urlService.getAnalytics(slug, params);
-      console.log("Analytics data:", data);
       return data;
     } catch (error) {
       console.error("Fetch analytics error:", error.response?.data);
@@ -151,7 +145,6 @@ const urlSlice = createSlice({
         state.urls = action.payload.links || action.payload.urls || [];
         state.pagination = action.payload.pagination;
         state.error = null;
-        console.log("URLs stored in state:", state.urls.length);
       })
       .addCase(fetchUrls.rejected, (state, action) => {
         state.isLoading = false;

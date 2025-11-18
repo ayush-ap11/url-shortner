@@ -1,10 +1,4 @@
-import {
-  Link2,
-  MousePointerClick,
-  PlusCircle,
-  Globe,
-  Search,
-} from "lucide-react";
+import { Link2, MousePointerClick, PlusCircle, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUrls, deleteUrl } from "../store/slices/urlSlice";

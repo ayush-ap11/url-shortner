@@ -152,7 +152,7 @@ export default function Hero() {
               alt=""
             />
           </div>
-          <span>Trusted by 20,000+ marketers & developers</span>
+          <span>Trusted by Friends & Developers</span>
         </div>
       </div>
     </section>

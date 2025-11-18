@@ -12,7 +12,7 @@ import { config } from "../config/env";
 export const LinkCard = ({ link, onEdit, onDelete, onViewAnalytics }) => {
   const [copied, setCopied] = useState(false);
 
-  const shortUrl = `${config.shortUrlBase}/${link.slug}`;
+  const shortUrl = `${config.apiBaseUrl.replace("/api", "")}/${link.slug}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(shortUrl);
