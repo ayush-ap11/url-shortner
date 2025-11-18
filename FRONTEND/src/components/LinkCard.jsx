@@ -29,9 +29,7 @@ export const LinkCard = ({ link, onEdit, onDelete, onViewAnalytics }) => {
     <div
       className="
         group p-5 rounded-2xl bg-white/5 backdrop-blur-xl 
-        border border-stone-800 hover:border-purple-400/30
-        transition-all duration-200 ease-in
-        hover:scale-[1.01] hover:shadow-lg
+        border border-stone-800 
       "
     >
       {/* Header */}

@@ -5,25 +5,33 @@ exports.getAnalytics = async (req, res) => {
   try {
     const { slug } = req.params;
 
-    const link = await Link.findOne({ slug });
+    console.log("Fetching analytics for slug:", slug, "User:", req.userId);
+
+    const link = await Link.findOne({ slug, user: req.userId });
     if (!link) {
-      return res.status(404).json({ error: "Link not found" });
+      console.log("❌ Link not found for slug:", slug);
+      return res.status(404).json({ errors: ["Link not found"] });
     }
 
+    console.log("Found link:", link._id);
+
     const analytics = await Analytics.find({ linkId: link._id }).sort({
-      date: 1,
+      date: -1,
     });
+
+    console.log(`Found ${analytics.length} analytics records`);
 
     return res.json({
       link: {
+        _id: link._id,
         originalUrl: link.originalUrl,
         slug: link.slug,
-        clickCount: link.clickCount,
+        clicks: link.clicks || 0,
       },
       analytics,
     });
   } catch (err) {
     console.error("Analytics fetch error:", err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ errors: ["Server error"] });
   }
 };

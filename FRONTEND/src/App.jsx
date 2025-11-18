@@ -11,7 +11,11 @@ const HomePage = lazy(() => import("./pages/HomePage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
+const AccountPage = lazy(() => import("./pages/AccountPage"));
+const PricingPage = lazy(() => import("./pages/PricingPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
 const GithubCallbackPage = lazy(() => import("./pages/GithubCallbackPage"));
+const GoogleCallbackPage = lazy(() => import("./pages/GoogleCallbackPage"));
 
 const App = () => {
   useAuthInit();
@@ -23,6 +27,8 @@ const App = () => {
           {/* Public routes with main layout */}
           <Route element={<MainLayout />}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Route>
 
           {/* Auth routes */}
@@ -47,6 +53,10 @@ const App = () => {
               path={ROUTES.GITHUB_CALLBACK}
               element={<GithubCallbackPage />}
             />
+            <Route
+              path="/auth/google/callback"
+              element={<GoogleCallbackPage />}
+            />
           </Route>
 
           {/* Protected routes */}
@@ -56,6 +66,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <AccountPage />
                 </ProtectedRoute>
               }
             />

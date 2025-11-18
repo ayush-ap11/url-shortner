@@ -6,8 +6,7 @@ export const API_ENDPOINTS = {
     REGISTER: "/auth/register",
     LOGOUT: "/auth/logout",
     ME: "/auth/me",
-    GOOGLE: "/auth/google",
-    GITHUB: "/auth/github",
+    GOOGLE_CALLBACK: "/auth/google/callback",
     GITHUB_CALLBACK: "/auth/github/callback",
   },
 

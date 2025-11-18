@@ -96,11 +96,14 @@ export const deleteUrl = createAsyncThunk(
 
 export const fetchAnalytics = createAsyncThunk(
   "url/fetchAnalytics",
-  async ({ id, params }, { rejectWithValue }) => {
+  async ({ slug, params }, { rejectWithValue }) => {
     try {
-      const data = await urlService.getAnalytics(id, params);
+      console.log("Fetching analytics for slug:", slug);
+      const data = await urlService.getAnalytics(slug, params);
+      console.log("Analytics data:", data);
       return data;
     } catch (error) {
+      console.error("Fetch analytics error:", error.response?.data);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch analytics"
       );

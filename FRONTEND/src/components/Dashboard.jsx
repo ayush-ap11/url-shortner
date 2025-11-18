@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUrls, deleteUrl } from "../store/slices/urlSlice";
 import CreateLinkModal from "./CreateLinkModal";
 import EditLinkModal from "./EditLinkModal";
+import AnalyticsModal from "./AnalyticsModal";
 import LinkCard from "./LinkCard";
 import { Spinner } from "./ui";
 
@@ -20,6 +21,7 @@ export default function Dashboard() {
   const [animate, setAnimate] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -44,8 +46,8 @@ export default function Dashboard() {
   };
 
   const handleViewAnalytics = (link) => {
-    // TODO: Navigate to analytics page or show analytics modal
-    console.log("View analytics for:", link);
+    setSelectedLink(link);
+    setShowAnalyticsModal(true);
   };
 
   const totalClicks = (urls || []).reduce(
@@ -214,6 +216,15 @@ export default function Dashboard() {
         isOpen={showEditModal}
         onClose={() => {
           setShowEditModal(false);
+          setSelectedLink(null);
+        }}
+        link={selectedLink}
+      />
+
+      <AnalyticsModal
+        isOpen={showAnalyticsModal}
+        onClose={() => {
+          setShowAnalyticsModal(false);
           setSelectedLink(null);
         }}
         link={selectedLink}

@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 export const DashboardPage = () => {
   return (
     <>
-      <Navbar isLoggedIn={true} />
+      <Navbar />
       <Dashboard />
     </>
   );

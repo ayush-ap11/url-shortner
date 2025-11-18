@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authService } from "../../services/authService";
+import {
+  authService,
+  githubAuthService,
+  googleAuthService,
+} from "../../services/authService";
 import { userManager, clearAuthData } from "../../utils/auth";
 
 // Initial state - check if user exists in localStorage
@@ -76,6 +80,42 @@ export const getCurrentUser = createAsyncThunk(
   }
 );
 
+// GitHub OAuth
+export const loginWithGithub = createAsyncThunk(
+  "auth/loginWithGithub",
+  async (code, { rejectWithValue }) => {
+    try {
+      const data = await githubAuthService.handleGithubCallback(code);
+      userManager.setUser(data.user);
+      return data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errors?.[0] ||
+        error.response?.data?.message ||
+        "GitHub login failed";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+// Google OAuth
+export const loginWithGoogle = createAsyncThunk(
+  "auth/loginWithGoogle",
+  async (credential, { rejectWithValue }) => {
+    try {
+      const data = await googleAuthService.loginWithGoogle(credential);
+      userManager.setUser(data.user);
+      return data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errors?.[0] ||
+        error.response?.data?.message ||
+        "Google login failed";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 // Auth slice
 const authSlice = createSlice({
   name: "auth",
@@ -132,6 +172,36 @@ const authSlice = createSlice({
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isAuthenticated = true;
+      })
+      // GitHub OAuth
+      .addCase(loginWithGithub.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginWithGithub.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.error = null;
+      })
+      .addCase(loginWithGithub.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Google OAuth
+      .addCase(loginWithGoogle.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.error = null;
+      })
+      .addCase(loginWithGoogle.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });

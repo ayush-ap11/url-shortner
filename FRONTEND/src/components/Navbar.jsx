@@ -1,9 +1,12 @@
 import { User, Menu, X, LayoutDashboard, LogIn, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-export default function Navbar({ isLoggedIn }) {
+export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [animateWords, setAnimateWords] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const isLoggedIn = isAuthenticated;
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimateWords(true), 100);

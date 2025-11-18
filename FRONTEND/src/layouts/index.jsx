@@ -8,7 +8,7 @@ export const MainLayout = () => {
 
   return (
     <div className="min-h-screen bg-neutral-900">
-      <Navbar isLoggedIn={isAuthenticated} />
+      <Navbar />
       <main>
         <Outlet />
       </main>

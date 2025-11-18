@@ -34,9 +34,11 @@ export const authService = {
 
 // Google OAuth
 export const googleAuthService = {
-  // Handle Google login
-  loginWithGoogle: async (credential) => {
-    const response = await api.post(API_ENDPOINTS.AUTH.GOOGLE, { credential });
+  // Handle Google callback
+  loginWithGoogle: async (code) => {
+    const response = await api.post(API_ENDPOINTS.AUTH.GOOGLE_CALLBACK, {
+      code,
+    });
     return response.data;
   },
 };

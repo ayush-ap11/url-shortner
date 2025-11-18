@@ -46,22 +46,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3 text-sm text-neutral-400">
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/" className="hover:text-white transition">
                   Features
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/pricing" className="hover:text-white transition">
                   Pricing
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/pricing" className="hover:text-white transition">
                   Custom Domains
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/dashboard" className="hover:text-white transition">
                   Analytics
                 </a>
               </li>
@@ -75,22 +75,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3 text-sm text-neutral-400">
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/contact" className="hover:text-white transition">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/contact" className="hover:text-white transition">
                   API Docs
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/" className="hover:text-white transition">
                   Status
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition">
+                <a href="/contact" className="hover:text-white transition">
                   Contact Us
                 </a>
               </li>

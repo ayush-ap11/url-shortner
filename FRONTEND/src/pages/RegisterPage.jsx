@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Mail, Lock, User, Phone } from "lucide-react";
+import { Mail, Lock, User, Phone, Sparkles } from "lucide-react";
 import { registerUser } from "../store/slices/authSlice";
 import {
   validateEmail,
@@ -19,6 +19,7 @@ export const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, isLoading, error } = useAuth();
+  const [animate, setAnimate] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,6 +35,11 @@ export const RegisterPage = () => {
       navigate(ROUTES.DASHBOARD);
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimate(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,88 +89,213 @@ export const RegisterPage = () => {
 
   return (
     <>
-      <Navbar isLoggedIn={false} />
+      <Navbar />
       <div className="min-h-screen flex items-center justify-center bg-neutral-900 px-4 py-10 font-[Inter] text-white">
-        <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-stone-800 shadow-sm p-8 animate-fade-up">
-          <h1 className="text-3xl font-semibold mb-2 font-[Open Sans] tracking-tight animate-scale-up">
+        <div
+          className={`
+            w-full max-w-md rounded-3xl bg-white/5 backdrop-blur-xl 
+            border border-stone-800 shadow-2xl p-10 
+            transition-all duration-500 ease-out
+            ${
+              animate
+                ? "opacity-100 scale-100 translate-y-0"
+                : "opacity-0 scale-95 translate-y-4"
+            }
+          `}
+        >
+          {/* Icon Header */}
+          <div
+            className={`
+              w-16 h-16 rounded-2xl bg-emerald-600/10 border border-emerald-500/30 
+              flex items-center justify-center mb-6 mx-auto
+              transition-all duration-500 ease-out delay-100
+              ${
+                animate
+                  ? "opacity-100 scale-100 rotate-0"
+                  : "opacity-0 scale-50 rotate-12"
+              }
+            `}
+          >
+            <Sparkles className="w-8 h-8 text-emerald-400" />
+          </div>
+
+          <h1
+            className={`
+              text-4xl font-semibold mb-3 font-[Open Sans] 
+              tracking-tight text-center
+              transition-all duration-500 ease-out delay-200
+              ${
+                animate
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-2"
+              }
+            `}
+          >
             Create your account
           </h1>
 
-          <p className="text-sm text-gray-400 mb-8 animate-fade-up delay-200">
+          <p
+            className={`
+              text-gray-400 mb-8 text-center
+              transition-all duration-500 ease-out delay-300
+              ${
+                animate
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-2"
+              }
+            `}
+          >
             Start shortening links in seconds — it's free!
           </p>
 
-          {error && <Alert type="error" message={error} className="mb-4" />}
+          {error && <Alert type="error" message={error} className="mb-6" />}
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              name="name"
-              label="Full Name"
-              placeholder="John Carter"
-              value={formData.name}
-              onChange={handleChange}
-              error={formErrors.name}
-              icon={User}
-              className="animate-slide-right delay-200"
-            />
-
-            <Input
-              type="text"
-              name="phone"
-              label="Phone Number"
-              placeholder="9876543210"
-              value={formData.phone}
-              onChange={handleChange}
-              error={formErrors.phone}
-              icon={Phone}
-              className="animate-slide-right delay-300"
-            />
-
-            <Input
-              type="email"
-              name="email"
-              label="Email Address"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              error={formErrors.email}
-              icon={Mail}
-              className="animate-slide-right delay-400"
-            />
-
-            <Input
-              type="password"
-              name="password"
-              label="Password"
-              placeholder="Create a strong password"
-              value={formData.password}
-              onChange={handleChange}
-              error={formErrors.password}
-              icon={Lock}
-              className="animate-slide-right delay-500"
-            />
-
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
-              loading={isLoading}
-              className="animate-scale-up delay-600"
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div
+              className={`
+                transition-all duration-500 ease-out delay-400
+                ${
+                  animate
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-4"
+                }
+              `}
             >
-              Sign Up
-            </Button>
+              <Input
+                type="text"
+                name="name"
+                label="Full Name"
+                placeholder="John Carter"
+                value={formData.name}
+                onChange={handleChange}
+                error={formErrors.name}
+                icon={User}
+              />
+            </div>
 
-            <FormDivider text="Or continue with" />
+            <div
+              className={`
+                transition-all duration-500 ease-out delay-500
+                ${
+                  animate
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-4"
+                }
+              `}
+            >
+              <Input
+                type="text"
+                name="phone"
+                label="Phone Number"
+                placeholder="9876543210"
+                value={formData.phone}
+                onChange={handleChange}
+                error={formErrors.phone}
+                icon={Phone}
+              />
+            </div>
 
-            <OAuthButtons />
+            <div
+              className={`
+                transition-all duration-500 ease-out delay-600
+                ${
+                  animate
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-4"
+                }
+              `}
+            >
+              <Input
+                type="email"
+                name="email"
+                label="Email Address"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                error={formErrors.email}
+                icon={Mail}
+              />
+            </div>
 
-            <p className="text-sm text-gray-400 mt-4 text-center animate-fade-up delay-700">
+            <div
+              className={`
+                transition-all duration-500 ease-out delay-700
+                ${
+                  animate
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-4"
+                }
+              `}
+            >
+              <Input
+                type="password"
+                name="password"
+                label="Password"
+                placeholder="Create a strong password"
+                value={formData.password}
+                onChange={handleChange}
+                error={formErrors.password}
+                icon={Lock}
+              />
+            </div>
+
+            <div
+              className={`
+                text-xs text-gray-500 -mt-1
+                transition-all duration-500 ease-out delay-750
+                ${animate ? "opacity-100" : "opacity-0"}
+              `}
+            >
+              Password must be at least 8 characters with uppercase, lowercase,
+              and number
+            </div>
+
+            <div
+              className={`
+                transition-all duration-500 ease-out delay-800
+                ${animate ? "opacity-100 scale-100" : "opacity-0 scale-95"}
+              `}
+            >
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                fullWidth
+                loading={isLoading}
+              >
+                Create account
+              </Button>
+            </div>
+
+            <div
+              className={`
+                transition-all duration-500 ease-out delay-900
+                ${animate ? "opacity-100" : "opacity-0"}
+              `}
+            >
+              <FormDivider text="Or continue with" />
+            </div>
+
+            <div
+              className={`
+                transition-all duration-500 ease-out delay-1000
+                ${animate ? "opacity-100 scale-100" : "opacity-0 scale-95"}
+              `}
+            >
+              <OAuthButtons />
+            </div>
+
+            <p
+              className={`
+                text-sm text-gray-400 text-center pt-2
+                transition-all duration-500 ease-out delay-1100
+                ${animate ? "opacity-100" : "opacity-0"}
+              `}
+            >
               Already have an account?{" "}
               <a
                 href={ROUTES.LOGIN}
-                className="text-purple-400 hover:text-purple-300"
+                className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
               >
                 Sign in
               </a>
