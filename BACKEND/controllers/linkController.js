@@ -190,6 +190,12 @@ exports.updateLink = async (req, res) => {
 
     if (originalUrl) link.originalUrl = originalUrl;
 
+    // Reset isExpired flag and recalculate expiration status
+    link.isExpired = false;
+    if (link.checkExpired()) {
+      link.isExpired = true;
+    }
+
     await link.save();
     console.log("✅ Link updated successfully:", link._id);
     res.json({ link });

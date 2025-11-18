@@ -22,11 +22,12 @@ const linkSchema = new mongoose.Schema({
 
 // Computed expiry check
 linkSchema.methods.checkExpired = function () {
-  if (this.isExpired) return true;
-
   const now = new Date();
 
+  // Check date-based expiration
   if (this.expiresAt && now > this.expiresAt) return true;
+
+  // Check click-based expiration
   if (this.maxClicks && this.clicks >= this.maxClicks) return true;
 
   return false;
