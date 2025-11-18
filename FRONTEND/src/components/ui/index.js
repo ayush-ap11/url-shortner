@@ -4,3 +4,4 @@ export { Input } from "./Input";
 export { Card } from "./Card";
 export { Spinner, LoadingScreen } from "./Spinner";
 export { Alert } from "./Alert";
+export { Modal } from "./Modal";

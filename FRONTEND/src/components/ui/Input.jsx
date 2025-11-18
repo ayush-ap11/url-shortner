@@ -2,6 +2,7 @@
 export const Input = ({
   label,
   error,
+  helperText,
   icon: Icon,
   className = "",
   containerClassName = "",
@@ -31,6 +32,9 @@ export const Input = ({
         />
       </div>
       {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
+      {helperText && !error && (
+        <p className="text-gray-500 text-xs mt-1">{helperText}</p>
+      )}
     </div>
   );
 };

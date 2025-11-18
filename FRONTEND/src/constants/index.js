@@ -5,21 +5,24 @@ export const API_ENDPOINTS = {
     LOGIN: "/auth/login",
     REGISTER: "/auth/register",
     LOGOUT: "/auth/logout",
-    REFRESH: "/auth/refresh",
     ME: "/auth/me",
     GOOGLE: "/auth/google",
     GITHUB: "/auth/github",
     GITHUB_CALLBACK: "/auth/github/callback",
   },
 
-  // URL endpoints
-  URLS: {
-    CREATE: "/urls",
-    LIST: "/urls",
-    GET: (id) => `/urls/${id}`,
-    UPDATE: (id) => `/urls/${id}`,
-    DELETE: (id) => `/urls/${id}`,
-    ANALYTICS: (id) => `/urls/${id}/analytics`,
+  // URL/Link endpoints (matches backend routes)
+  LINKS: {
+    CREATE: "/links/create",
+    LIST: "/links/all",
+    GET: (id) => `/links/${id}`,
+    UPDATE: (id) => `/links/${id}`,
+    DELETE: (id) => `/links/${id}`,
+  },
+
+  // Analytics endpoints
+  ANALYTICS: {
+    GET: (slug) => `/analytics/${slug}`,
   },
 
   // User endpoints

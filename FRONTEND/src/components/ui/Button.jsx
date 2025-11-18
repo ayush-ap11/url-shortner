@@ -5,7 +5,8 @@ export const Button = ({
   children,
   variant = "primary",
   size = "md",
-  isLoading = false,
+  loading = false,
+  fullWidth = false,
   disabled = false,
   icon: Icon,
   className = "",
@@ -32,11 +33,13 @@ export const Button = ({
 
   return (
     <button
-      disabled={disabled || isLoading}
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      disabled={disabled || loading}
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${
+        fullWidth ? "w-full" : ""
+      } ${className}`}
       {...props}
     >
-      {isLoading ? (
+      {loading ? (
         <>
           <Loader2 className="w-4 h-4 animate-spin" />
           Loading...

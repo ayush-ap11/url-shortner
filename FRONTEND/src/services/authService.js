@@ -10,33 +10,25 @@ export const authService = {
       email,
       password,
     });
-    return response.data;
+    return response.data; // Backend returns { user } and sets cookie
   },
 
   // Register new user
   register: async (userData) => {
     const response = await api.post(API_ENDPOINTS.AUTH.REGISTER, userData);
-    return response.data;
+    return response.data; // Backend returns { user } and sets cookie
   },
 
   // Logout user
   logout: async () => {
     const response = await api.post(API_ENDPOINTS.AUTH.LOGOUT);
-    return response.data;
+    return response.data; // Backend returns { ok: true } and clears cookie
   },
 
   // Get current user
   getCurrentUser: async () => {
     const response = await api.get(API_ENDPOINTS.AUTH.ME);
-    return response.data;
-  },
-
-  // Refresh access token
-  refreshToken: async (refreshToken) => {
-    const response = await api.post(API_ENDPOINTS.AUTH.REFRESH, {
-      refreshToken,
-    });
-    return response.data;
+    return response.data; // Backend returns { user }
   },
 };
 

@@ -34,9 +34,12 @@ export const fetchUrls = createAsyncThunk(
   "url/fetchAll",
   async (params, { rejectWithValue }) => {
     try {
+      console.log("Fetching URLs with params:", params);
       const data = await urlService.getUrls(params);
+      console.log("Fetched data:", data);
       return data;
     } catch (error) {
+      console.error("Fetch URLs error:", error.response?.data);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch URLs"
       );
@@ -62,11 +65,16 @@ export const updateUrl = createAsyncThunk(
   "url/update",
   async ({ id, urlData }, { rejectWithValue }) => {
     try {
+      console.log("Updating link with ID:", id, "Data:", urlData);
       const data = await urlService.updateUrl(id, urlData);
+      console.log("Update response:", data);
       return data;
     } catch (error) {
+      console.error("Update error:", error.response?.data);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to update URL"
+        error.response?.data?.errors?.[0] ||
+          error.response?.data?.message ||
+          "Failed to update URL"
       );
     }
   }
@@ -121,7 +129,8 @@ const urlSlice = createSlice({
       })
       .addCase(createUrl.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.urls.unshift(action.payload.url);
+        if (!state.urls) state.urls = [];
+        state.urls.unshift(action.payload.link);
         state.error = null;
       })
       .addCase(createUrl.rejected, (state, action) => {
@@ -135,9 +144,11 @@ const urlSlice = createSlice({
       })
       .addCase(fetchUrls.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.urls = action.payload.urls;
+        // Backend returns 'links' but we store as 'urls'
+        state.urls = action.payload.links || action.payload.urls || [];
         state.pagination = action.payload.pagination;
         state.error = null;
+        console.log("URLs stored in state:", state.urls.length);
       })
       .addCase(fetchUrls.rejected, (state, action) => {
         state.isLoading = false;
@@ -158,14 +169,31 @@ const urlSlice = createSlice({
         state.error = action.payload;
       })
       // Update URL
+      .addCase(updateUrl.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(updateUrl.fulfilled, (state, action) => {
-        const index = state.urls.findIndex(
-          (url) => url._id === action.payload.url._id
-        );
-        if (index !== -1) {
-          state.urls[index] = action.payload.url;
+        state.isLoading = false;
+        if (!state.urls) state.urls = [];
+
+        const updatedLink =
+          action.payload?.link || action.payload?.url || action.payload;
+
+        if (updatedLink && updatedLink._id) {
+          const index = state.urls.findIndex(
+            (url) => url._id === updatedLink._id
+          );
+          if (index !== -1) {
+            state.urls[index] = updatedLink;
+          }
+          state.currentUrl = updatedLink;
         }
-        state.currentUrl = action.payload.url;
+        state.error = null;
+      })
+      .addCase(updateUrl.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       })
       // Delete URL
       .addCase(deleteUrl.fulfilled, (state, action) => {

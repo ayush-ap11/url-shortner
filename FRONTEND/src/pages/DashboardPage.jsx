@@ -1,7 +1,13 @@
 import Dashboard from "../components/Dashboard";
+import Navbar from "../components/Navbar";
 
 export const DashboardPage = () => {
-  return <Dashboard />;
+  return (
+    <>
+      <Navbar isLoggedIn={true} />
+      <Dashboard />
+    </>
+  );
 };
 
 export default DashboardPage;

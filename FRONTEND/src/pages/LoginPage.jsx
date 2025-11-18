@@ -8,6 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { ROUTES } from "../constants";
 import { Button, Input, Alert } from "../components/ui";
 import { OAuthButtons, FormDivider } from "../components/forms";
+import Navbar from "../components/Navbar";
 
 export const LoginPage = () => {
   const dispatch = useDispatch();
@@ -69,84 +70,90 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-900 px-4 py-10 font-[Inter] text-white">
-      <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-stone-800 shadow-sm p-8 animate-fade-up">
-        <h1 className="text-3xl font-semibold mb-2 font-[Open Sans] tracking-tight animate-scale-up">
-          Welcome back
-        </h1>
+    <>
+      <Navbar isLoggedIn={false} />
+      <div className="min-h-screen flex items-center justify-center bg-neutral-900 px-4 py-10 font-[Inter] text-white">
+        <div className="w-full max-w-md rounded-2xl bg-white/5 backdrop-blur-xl border border-stone-800 shadow-sm p-8 animate-fade-up">
+          <h1 className="text-3xl font-semibold mb-2 font-[Open Sans] tracking-tight animate-scale-up">
+            Welcome back
+          </h1>
 
-        <p className="text-sm text-gray-400 mb-8 animate-fade-up delay-200">
-          Sign in to continue to Shortly
-        </p>
-
-        {error && <Alert type="error" message={error} className="mb-4" />}
-
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <Input
-            type="email"
-            name="email"
-            label="Email Address"
-            placeholder="you@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            error={formErrors.email}
-            icon={Mail}
-            className="animate-slide-right delay-300"
-          />
-
-          <Input
-            type="password"
-            name="password"
-            label="Password"
-            placeholder="Enter password"
-            value={formData.password}
-            onChange={handleChange}
-            error={formErrors.password}
-            icon={Lock}
-            className="animate-slide-right delay-400"
-          />
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="rememberMe"
-              id="rememberMe"
-              checked={formData.rememberMe}
-              onChange={handleChange}
-              className="w-4 h-4 rounded bg-neutral-800 border-stone-800"
-            />
-            <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-400">
-              Remember me
-            </label>
-          </div>
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={isLoading}
-            className="animate-scale-up delay-600"
-          >
-            Login
-          </Button>
-
-          <FormDivider text="Or continue with" />
-
-          <OAuthButtons />
-
-          <p className="text-sm text-gray-400 mt-4 text-center animate-fade-up delay-700">
-            Don't have an account?{" "}
-            <a
-              href={ROUTES.REGISTER}
-              className="text-purple-400 hover:text-purple-300"
-            >
-              Create account
-            </a>
+          <p className="text-sm text-gray-400 mb-8 animate-fade-up delay-200">
+            Sign in to continue to Shortly
           </p>
-        </form>
+
+          {error && <Alert type="error" message={error} className="mb-4" />}
+
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <Input
+              type="email"
+              name="email"
+              label="Email Address"
+              placeholder="you@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              error={formErrors.email}
+              icon={Mail}
+              className="animate-slide-right delay-300"
+            />
+
+            <Input
+              type="password"
+              name="password"
+              label="Password"
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
+              error={formErrors.password}
+              icon={Lock}
+              className="animate-slide-right delay-400"
+            />
+
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="rememberMe"
+                id="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleChange}
+                className="w-4 h-4 rounded bg-neutral-800 border-stone-800"
+              />
+              <label
+                htmlFor="rememberMe"
+                className="ml-2 text-sm text-gray-400"
+              >
+                Remember me
+              </label>
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              loading={isLoading}
+              className="animate-scale-up delay-600"
+            >
+              Login
+            </Button>
+
+            <FormDivider text="Or continue with" />
+
+            <OAuthButtons />
+
+            <p className="text-sm text-gray-400 mt-4 text-center animate-fade-up delay-700">
+              Don't have an account?{" "}
+              <a
+                href={ROUTES.REGISTER}
+                className="text-purple-400 hover:text-purple-300"
+              >
+                Create account
+              </a>
+            </p>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

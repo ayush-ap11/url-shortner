@@ -1,23 +1,19 @@
 import axios from "axios";
 import { config } from "../config/env";
-import { tokenManager, clearAuthData } from "../utils/auth";
+import { clearAuthData } from "../utils/auth";
 
-// Create axios instance
+// Create axios instance with cookie-based authentication
 const api = axios.create({
   baseURL: config.apiBaseUrl,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  withCredentials: true, // Important: Send cookies with requests
 });
 
-// Request interceptor - Add auth token
+// Request interceptor - No need to add token manually (using cookies)
 api.interceptors.request.use(
   (config) => {
-    const token = tokenManager.getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
   },
   (error) => {
@@ -25,40 +21,23 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor - Handle token refresh
+// Response interceptor - Handle authentication errors
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // If 401 and not already retried, try to refresh token
+    // If 401, clear auth and redirect to login
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      try {
-        const refreshToken = tokenManager.getRefreshToken();
-
-        if (!refreshToken) {
-          throw new Error("No refresh token");
-        }
-
-        const response = await axios.post(
-          `${config.apiBaseUrl}/auth/refresh`,
-          { refreshToken },
-          { withCredentials: true }
-        );
-
-        const { accessToken } = response.data;
-        tokenManager.setAccessToken(accessToken);
-
-        // Retry original request with new token
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return api(originalRequest);
-      } catch (refreshError) {
-        // Refresh failed, clear auth and redirect to login
-        clearAuthData();
+      // Clear auth data and redirect to login
+      clearAuthData();
+      if (
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register"
+      ) {
         window.location.href = "/login";
-        return Promise.reject(refreshError);
       }
     }
 
